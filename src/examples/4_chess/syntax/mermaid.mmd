@@ -1,22 +1,23 @@
-graph TD
+flowchart TD
     %% Actors
-    hans[Hans Niemann]
-
     subgraph defendants
         mc[Magnus Carlsen]
         playmagnus[Play Magnus Group]
         chesscom[Chess.com]
         naka[Hikaru Nakamura]
 
-        mc -->|Owns majority| playmagnus
-        playmagnus <-->|Merger talks| chesscom
-        chesscom -->|Sponsoring| naka
+        mc --Owns majority--> playmagnus
+        playmagnus <--Merger talks--> chesscom
+        chesscom --Sponsoring--> naka
     end
 
+    hans[Hans Niemann]
+
     %% Accusations
-    hans -->|sueing for $100M| defendants
+    hans --sueing for $100M--> defendants
 
     %% Offense
-    naka -->|Accused of cheating on his stream| hans
-    mc -->|Lost then withdrew with accusations| hans
-    chesscom -->|72 page report of cheating| hans
+    naka --Accused of cheating on his stream--> hans
+    mc --Lost then withdrew with accusations--> hans
+    chesscom --72 page report of cheating--> hans
+    

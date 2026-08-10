@@ -1,21 +1,21 @@
-graph TD
+flowchart TD
   subgraph aws
     aws_db(<img src='https://icons.d2lang.com/azure/Databases%20Service%20Color/Azure%20Database%20for%20PostgreSQL%20servers.svg' width='32' height='32' />)
     cache(<img src='https://icons.d2lang.com/azure/_Companies/Azure%20Cache%20Redis%20Product%20icon.svg' width='32' height='32' />)
     ec2(<img src='https://icons.d2lang.com/aws/_Group%20Icons/EC2-instance-container_light-bg.svg' width='32' height='32' />)
 
-    ec2 <-->|get persisted data| aws_db
-    ec2 <-->|get temporal data| cache
+    ec2 <--get persisted data--> aws_db
+    ec2 <--get temporal data--> cache
   end
 
   subgraph gcloud
     gcloud_db(<img src='https://icons.d2lang.com/azure/Databases%20Service%20Color/Azure%20Database%20for%20PostgreSQL%20servers.svg' width='32' height='32' />)
   end
 
-  aws_db -->|backup| gcloud_db
+  aws_db --backup--> gcloud_db
 
   dev(<img src='https://icons.d2lang.com/essentials/005-programmer.svg' width='32' height='32' />)
   github(<img src='https://icons.d2lang.com/dev/github.svg' width='32' height='32' />)
 
-  dev -->|ssh| ec2
-  dev -->|version control| github
+  dev --ssh--> ec2
+  dev --version control--> github

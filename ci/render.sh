@@ -10,7 +10,10 @@ _d2() {
 }
 
 _mmdc() {
+  echo '{ "layout": "elk" }' > ./mermaid-elk.config.json
   sh_c mmdc -i ./src/examples/"$ex"/syntax/mermaid.mmd -o ./src/examples/"$ex"/render/mermaid_dagre.svg
+  sh_c mmdc -i ./src/examples/"$ex"/syntax/mermaid.mmd -c ./mermaid-elk.config.json -o ./src/examples/"$ex"/render/mermaid_elk.svg
+  rm ./mermaid-elk.config.json
 }
 
 _dot() {
@@ -27,7 +30,7 @@ main() {
   job_parseflags "$@"
   for ex in $(find ./src/examples -mindepth 1 -maxdepth 1 | sort -V); do
     ex=${ex#./src/examples/}
-    export JOBNAME=$ex
+    export JOBNAME="$ex"
     if ! _runjob_filter; then
       continue
     fi
@@ -47,6 +50,10 @@ main() {
     fi
     waitjobs
   done
+  
+  # Generate image imports after all renders are complete
+  bigheader "Generating image imports"
+  sh_c tsx ./scripts/generate-img-imports.ts
 }
 
 main "$@"
