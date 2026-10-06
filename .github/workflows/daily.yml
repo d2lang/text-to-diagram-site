@@ -9,12 +9,17 @@ concurrency:
 
 jobs:
   ci:
+    name: daily-ci
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --global yarn@1.22.22
       - uses: actions/cache@v4
         with:
           path: ~/.cache/yarn/v6

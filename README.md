@@ -17,6 +17,8 @@
 [![daily](https://github.com/d2lang/text-to-diagram-site/actions/workflows/daily.yml/badge.svg)](https://github.com/d2lang/text-to-diagram-site/actions/workflows/daily.yml)
 [![license](https://img.shields.io/github/license/d2lang/text-to-diagram-site?color=9cf)](./LICENSE)
 
+<a href="https://vercel.com/open-source-program"><img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge-2026.svg" /></a>
+
 _Full disclosure: This site and D2 were originally created at Terrastruct. Today, the
 site is maintained by the independent D2 project, fiscally sponsored by Hack Club. D2
 appears first; otherwise, it gets no special treatment. Contributions and corrections
@@ -49,10 +51,60 @@ catalog we've found is
 ```sh
 # Only needed first run
 git submodule update --init --recursive
-yarn
+npx --yes --package=yarn@1.22.22 -- yarn install --frozen-lockfile
 
-yarn dev
+npx --yes --package=yarn@1.22.22 -- yarn dev
 ```
+
+### Production hosting
+
+Vercel builds the `master` branch as a static site for `text-to-diagram.com` and
+`www.text-to-diagram.com`. Use Node.js 24 and Yarn 1.22.22. Initialize both public
+Git submodules before building, then run:
+
+```sh
+git submodule update --init --recursive
+npx --yes --package=yarn@1.22.22 -- yarn install --frozen-lockfile
+npx --yes --package=yarn@1.22.22 -- yarn build
+```
+
+The existing build exports `out/`, including `index.html`, `404.html`, the sitemap,
+robots file, and browser assets. The checked-in examples are already rendered;
+production builds do not need D2, Mermaid, Graphviz, or PlantUML. No application
+server or production environment secrets are required.
+
+Import this repository into the D2 Vercel team as `text-to-diagram`. The
+`vercel.json` settings select **Other** as the framework and `out` as the output.
+Choose a fixed **Standard** build machine, disable on-demand concurrency, and
+require the existing GitHub checks `ci` and `nofixups` before assigning production
+domains. Keep the public PR and daily workflows enabled.
+
+Add both custom domains in the project's **Domains** settings. Configure
+`www.text-to-diagram.com` to redirect to `text-to-diagram.com` and select status
+**301** explicitly; Vercel's default domain redirect status is **308**. This
+project setting is required alongside the redirect intent declared in
+`vercel.json`.
+
+`vercel.json` preserves the static 404, current security headers, Plausible
+script/event proxies, and browser cache lifetimes on apex pages, assets, and
+proxy responses. The domain redirect uses Vercel's default response headers. Its
+301 retains the original path and query, including repeated query parameters.
+This corrects the former CloudFront function, which double-encoded already
+escaped query values. There is no catch-all rewrite to `index.html`: missing
+paths must keep a 404 status.
+
+Before changing DNS, verify both hostnames, a missing path, `/404`, `/404.html`,
+representative CSS/JavaScript/WASM and images, `/js/script.js`, and `/api/event`.
+The DNS and retained AWS rollback resources are managed in `d2lang/infra`; review
+and apply that repository's migration plan separately. Keep the former S3 bucket
+and CloudFront distribution through the rollback window.
+
+For an application regression, promote the previous working Vercel deployment.
+For a hosting rollback, pause automatic Vercel deployments, re-enable the retained
+CloudFront distribution through a reviewed Terraform change, wait for it to be
+`Deployed`, and restore its former DNS aliases. Verify HTTPS and redirects after
+DNS convergence. The AWS deployment job is retired; do not restore it while
+Vercel owns production.
 
 ### Adding examples
 
