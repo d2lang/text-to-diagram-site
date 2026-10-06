@@ -9,7 +9,7 @@
     "lint": "next lint",
     "lint:fix": "eslint src --fix && yarn format",
     "lint:strict": "eslint --max-warnings=0 src",
-    "typecheck": "tsc --noEmit --incremental false",
+    "typecheck": "git submodule update --init src/extensions/d2-vscode && tsc --noEmit --incremental false",
     "format": "prettier -w .",
     "format:check": "prettier -c ."
   },
