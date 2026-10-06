@@ -60,5 +60,9 @@
     "**/*.{json,css,scss,md}": [
       "prettier -w"
     ]
-  }
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "packageManager": "yarn@1.22.22"
 }

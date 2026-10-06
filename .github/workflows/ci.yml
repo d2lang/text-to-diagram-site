@@ -12,6 +12,10 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --global yarn@1.22.22
       - uses: actions/cache@v4
         with:
           path: ~/.cache/yarn/v6
@@ -30,32 +34,3 @@ jobs:
       - uses: actions/checkout@v4
       - run: git submodule update --init
       - run: COLOR=1 ./ci/sub/bin/nofixups.sh
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [ci, nofixups]
-    runs-on: ubuntu-latest
-    concurrency:
-      group: text-to-diagram-production
-      cancel-in-progress: true
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions/cache@v4
-        with:
-          path: ~/.cache/yarn/v6
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn install --frozen-lockfile
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-      - run: ./ci/deploy.sh
-        env:
-          AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET }}
-          AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
