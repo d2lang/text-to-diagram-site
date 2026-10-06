@@ -79,12 +79,19 @@ Choose a fixed **Standard** build machine, disable on-demand concurrency, and
 require the existing GitHub checks `ci` and `nofixups` before assigning production
 domains. Keep the public PR and daily workflows enabled.
 
-The routing configuration preserves the static 404, current security headers,
-Plausible script/event proxies, and browser cache lifetimes. The `www` hostname
-returns a 301 to the apex with the original path and query, including repeated
-query parameters. This corrects the former CloudFront function, which
-double-encoded already escaped query values. There is no catch-all rewrite to
-`index.html`: missing paths must keep a 404 status.
+Add both custom domains in the project's **Domains** settings. Configure
+`www.text-to-diagram.com` to redirect to `text-to-diagram.com` and select status
+**301** explicitly; Vercel's default domain redirect status is **308**. This
+project setting is required alongside the redirect intent declared in
+`vercel.json`.
+
+`vercel.json` preserves the static 404, current security headers, Plausible
+script/event proxies, and browser cache lifetimes on apex pages, assets, and
+proxy responses. The domain redirect uses Vercel's default response headers. Its
+301 retains the original path and query, including repeated query parameters.
+This corrects the former CloudFront function, which double-encoded already
+escaped query values. There is no catch-all rewrite to `index.html`: missing
+paths must keep a 404 status.
 
 Before changing DNS, verify both hostnames, a missing path, `/404`, `/404.html`,
 representative CSS/JavaScript/WASM and images, `/js/script.js`, and `/api/event`.
