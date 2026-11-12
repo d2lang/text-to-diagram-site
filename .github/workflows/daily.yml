@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
+  daily-ci:
     name: daily-ci
     runs-on: ubuntu-latest
     permissions:
