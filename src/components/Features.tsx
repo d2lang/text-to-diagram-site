@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import React from 'react';
 
 import LanguageDropdown from '@/components/LanguageDropdown';
+import UnderlineLink from '@/components/links/UnderlineLink';
 
 import {
   LangNames,
@@ -111,7 +112,18 @@ const features: Feature[] = [
     title: 'Editor support',
     description: 'The state of editor support for the language',
     value: {
-      [D2_LANG]: `Creator-made extensions for VSCode and Vim`,
+      [D2_LANG]: (
+        <>
+          Official extensions for{' '}
+          <UnderlineLink href='https://marketplace.visualstudio.com/items?itemName=d2lang.d2lang'>
+            VS Code (d2lang)
+          </UnderlineLink>{' '}
+          and{' '}
+          <UnderlineLink href='https://github.com/d2lang/d2-vim'>
+            Vim
+          </UnderlineLink>
+        </>
+      ),
       [MERMAID_LANG]: `Community-made extensions for VSCode and Atom`,
       [GRAPHVIZ_LANG]: `Community-made extensions for VSCode, Vim, most IDEs`,
       [PLANTUML_LANG]: `Community-made extensions for VSCode, Vim, Atom`,
