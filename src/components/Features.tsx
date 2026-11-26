@@ -118,10 +118,7 @@ const features: Feature[] = [
           <UnderlineLink href='https://marketplace.visualstudio.com/items?itemName=d2lang.d2lang'>
             VS Code (d2lang)
           </UnderlineLink>{' '}
-          and{' '}
-          <UnderlineLink href='https://github.com/d2lang/d2-vim'>
-            Vim
-          </UnderlineLink>
+          and <UnderlineLink href='https://github.com/d2lang/d2-vim'>Vim</UnderlineLink>
         </>
       ),
       [MERMAID_LANG]: `Community-made extensions for VSCode and Atom`,
